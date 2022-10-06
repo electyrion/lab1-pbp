@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+
+{% block meta %}
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+    $(document).ready(function(){
+      $("#get-data").click(function(){
+        $.get(window.location.href.replace("ajax", "json"), function(data) {
+          $("#wishlist-data").empty();
+          data.forEach(function(item) {
+            $("#wishlist-data").append(
+              `<tr>
+                <td>${item.fields.nama_barang}</td>
+                <td>${item.fields.harga_barang}</td>
+                <td>${item.fields.deskripsi}</td>
+              </tr>`
+            );
+          });
+        });
+      });
+    });
+
+    function postAjax() {
+      $("form#wishlist-form").submit(function (e) {
+            e.preventDefault();
+            var actionURL = event.currentTarget.action;
+            var formData = $("form#wishlist-form").serialize();
+            console.log(formData);
+            $.ajax({
+                url: actionURL,
+                type: "POST",
+                data: formData,
+                success: (data) => {
+                    alert("success!");
+                },
+                error: (error) => {
+                    console.log(error);
+                    alert("Error!");
+                }
+            });
+        });
+    }
+
+</script>
+
+{% endblock meta %}
+
+
+{% block content %}
+
+<nav class="navbar navbar-expand-lg navbar-light d-flex justify-content-between" style="background-color: #e3f2fd;">
+    <a class="navbar-brand mx-5"> {{ nama }} </a>
+    <a class="btn btn-danger mx-5" href="{% url 'wishlist:logout' %}"> Logout </a>
+</nav>
+
+<div class="row justify-content-center mt-4">
+    <div class="col-auto">
+        <table class="table table-responsive">
+            <thead class="table-dark">
+                <tr>
+                    <th scope="col" class="text-center">Nama Barang</th>
+                    <th scope="col" class="text-center">Harga Barang</th>
+                    <th scope="col" class="text-center">Deskripsi</th>
+                </tr>
+            </thead>
+            <tbody class="text-center" id="wishlist-data">
+            </tbody>
+        </table>
+    </div>
+</div>
+  
+<div class="text-center">
+  <button id="get-data" class="btn btn-primary">Get Data</button>
+</div>
+
+<div class="d-flex justify-content-center mt-5">
+  <form method="POST" action="{% url 'wishlist:submit_ajax' %}" id="wishlist-form">
+    {% csrf_token %}
+    <input type="text" name="nama_barang" placeholder="Nama Barang" required/>
+    <input type="number" name="harga_barang" placeholder="Harga Barang" required/>
+    <input type="text" name="deskripsi" placeholder="Deskripsi" required/>
+    <input type="submit" value="Tambah" />
+  </form>  
+</div>
+
+<h5 class="text-center mt-4">Sesi terakhir login: {{ last_login }}</h5>
+
+{% endblock content %}

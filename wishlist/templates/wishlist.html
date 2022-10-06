@@ -1,9 +1,13 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<nav class="navbar navbar-expand-lg navbar-light d-flex justify-content-between" style="background-color: #e3f2fd;">
+<nav class="navbar navbar-expand-lg navbar-light justify-content-between" style="background-color: #e3f2fd;">
     <a class="navbar-brand mx-5"> {{ nama }} </a>
-    <a class="btn btn-danger mx-5" href="{% url 'wishlist:logout' %}"> Logout </a>
+    <div class="d-flex justify-content-end">
+        <a class="btn btn-primary" href="{% url 'wishlist:show_wishlist_ajax' %}"> Ajax Version </a>
+        <a class="btn btn-danger mx-5" href="{% url 'wishlist:logout' %}"> Logout </a>
+    </div>
+    
 </nav>
 
 <h5 class="text-center mt-5">My Wishlist</h5>

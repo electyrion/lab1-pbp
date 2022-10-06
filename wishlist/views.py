@@ -12,6 +12,7 @@ import datetime
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 
+
 def register(request):
     form = UserCreationForm()
 
@@ -21,9 +22,10 @@ def register(request):
             form.save()
             messages.success(request, 'Akun telah berhasil dibuat!')
             return redirect('wishlist:login')
-    
-    context = {'form':form}
+
+    context = {'form': form}
     return render(request, 'register.html', context)
+
 
 def login_user(request):
     if request.method == 'POST':
@@ -31,20 +33,24 @@ def login_user(request):
         password = request.POST.get('password')
         user = authenticate(request, username=username, password=password)
         if user is not None:
-            login(request, user) # melakukan login terlebih dahulu
-            response = HttpResponseRedirect(reverse("wishlist:show_wishlist")) # membuat response
-            response.set_cookie('last_login', str(datetime.datetime.now())) # membuat cookie last_login dan menambahkannya ke dalam response
+            login(request, user)  # melakukan login terlebih dahulu
+            response = HttpResponseRedirect(
+                reverse("wishlist:show_wishlist"))  # membuat response
+            # membuat cookie last_login dan menambahkannya ke dalam response
+            response.set_cookie('last_login', str(datetime.datetime.now()))
             return response
         else:
             messages.info(request, 'Username atau Password salah!')
     context = {}
     return render(request, 'login.html', context)
 
+
 def logout_user(request):
     logout(request)
     response = HttpResponseRedirect(reverse('wishlist:login'))
     response.delete_cookie('last_login')
     return response
+
 
 @login_required(login_url='/wishlist/login/')
 def show_wishlist(request):
@@ -55,6 +61,32 @@ def show_wishlist(request):
         'last_login': request.COOKIES['last_login'],
     }
     return render(request, "wishlist.html", context)
+
+
+@login_required(login_url='/wishlist/login/')
+def show_wishlist_ajax(request):
+    data_barang_wishlist = BarangWishlist.objects.all()
+    context = {
+        'nama': 'Muhammad Vicky Maulana',
+        'last_login': request.COOKIES['last_login'],
+        'logged_in': request.user.is_authenticated,
+    }
+    return render(request, "wishlist_ajax.html", context)
+
+
+@login_required(login_url='/wishlist/login/')
+def submit_ajax(request):
+    if request.method == 'POST':
+        nama_barang = request.POST.get('nama_barang')
+        harga_barang = request.POST.get('harga_barang')
+        deskripsi = request.POST.get('deskripsi')
+        BarangWishlist.objects.create(
+            nama_barang=nama_barang,
+            harga_barang=harga_barang,
+            deskripsi=deskripsi,
+        )
+        return HttpResponseRedirect('/wishlist/ajax/')
+    return HttpResponse('Data gagal disimpan')
 
 
 def show_xml(request):

@@ -7,8 +7,8 @@
             "harga_barang":"14000000",
             "deskripsi": "Bikin sakit Maag karena harganya mahal."
         }
-},
-{
+    },
+    {
         "model":"wishlist.barangwishlist",
         "pk":2,
         "fields":{

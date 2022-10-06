@@ -2,51 +2,78 @@
 
 {% block meta %}
 <title>Login</title>
+<style>
+    .gradient-custom {
+        /* fallback for old browsers */
+        background: #6a11cb;
+
+        /* Chrome 10-25, Safari 5.1-6 */
+        background: -webkit-linear-gradient(to right, rgba(106, 17, 203, 1), rgba(37, 117, 252, 1));
+
+        /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+        background: linear-gradient(to right, rgba(106, 17, 203, 1), rgba(37, 117, 252, 1))
+    }
+</style>
 {% endblock meta %}
 
 {% block content %}
-<style>
-    .login {
-        margin-top: 250px;
-        margin-bottom: 50px;
-    }
-</style>
 
-<div class = "login">
+<section class="vh-100 gradient-custom">
+    <div class="container py-5 h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+                <div class="card bg-dark text-white" style="border-radius: 1rem;">
+                    <div class="card-body p-5 text-center">
+                        <div class="mb-md-5 mt-md-4 pb-5">
+                            <h2 class="fw-bold mb-2 text-uppercase">Login</h2>
+                            <p class="text-white-50 mb-5">Please enter your login and password!</p>
 
-    <h1 class="text-center">Login</h1>
+                            <div class="form-outline form-white mb-4">
 
-    <form method="POST" class="mt-4">
-        {% csrf_token %}
-        <table class="d-flex justify-content-center">
-            <tr class="mt-2">
-                <td>Username:&nbsp;&nbsp;</td>
-                <td><input type="text" name="username" placeholder="Username" class="form-control"></td>
-            </tr>
+                            </div>
+        
+                            <form method="POST" class="">
+                                {% csrf_token %}
+                                <table class="d-flex justify-content-center">
+                                    <div class="form-outline form-white mb-4">
+                                        <label class="form-label">Username</label>
+                                        <input type="text" name="username" placeholder="Username" class="form-control">
+                                    </div>
+                                    
+                                    <div class="form-outline form-white mb-4">
+                                        <label class="form-label">Password</label>
+                                        <input type="password" name="password" placeholder="Password" class="form-control">
+                                    </div>
+
+                                    <button class="btn btn-outline-light btn-lg px-5" type="submit">Login</button>
+
+                                </table>
+                            </form>
+
+                            <div class="text-center">
+                                {% if messages %}
+                                <ul>
+                                    {% for message in messages %}
+                                        <li>{{ message }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                            </div>
+                            
+                            
+                            <div class="text-center mt-4">
+                                Belum mempunyai akun? <a href="{% url 'wishlist:register' %}">Buat Akun</a>
+                            </div>
+                        </div>
+                        
+                    </div>
                     
-            <tr class="mt-2">
-                <td>Password: </td>
-                <td><input type="password" name="password" placeholder="Password" class="form-control"></td>
-            </tr>
-
-            <tr class="d-flex justify-content-center">
-                <td type="button" class="btn btn-primary"><input class="btn login_btn" type="submit" value="Login"></td>
-            </tr>
-        </table>
-    </form>
-
-    {% if messages %}
-        <ul>
-            {% for message in messages %}
-                <li>{{ message }}</li>
-            {% endfor %}
-        </ul>
-    {% endif %}     
-    
-    <div class="text-center mt-4">
-        Belum mempunyai akun? <a href="{% url 'wishlist:register' %}">Buat Akun</a>
+                </div>
+                
+            </div>
+            
+        </div>
     </div>
-
-</div>
+</section>
 
 {% endblock content %}
